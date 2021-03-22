@@ -87,8 +87,10 @@ function restart() {
 			fi
 			# if jack is running and pulse jack modules aren't loaded,
 			# let's load them and set them as default ports
-			pacmd load-module module-jack-sink channels=2
-			pacmd load-module module-jack-source channels=2
+			pacmd load-module module-jack-sink channels=2 connect=no
+			pacmd load-module module-jack-source channels=2 connect=no
+			jack_connect "PulseAudio JACK Sink-01:front-left" "PulseAudio JACK Source-01:front-left"
+			jack_connect "PulseAudio JACK Sink-01:front-right" "PulseAudio JACK Source-01:front-right"
 			pacmd unload-module module-suspend-on-idle
 			pacmd set-default-sink jack_out
 			# move around source port, seems to make pulseaudio work with jack
@@ -121,8 +123,10 @@ function start() {
 		source=`pacmd list short sinks |  sed -n "/Default source name/p"| sed "s/Default source name://"`
 		echo $source >"$pajack_dir"/pasourcej
 		# load the pulseaudio jack module and set them as default ports
-		pacmd load-module module-jack-sink channels=2
-		pacmd load-module module-jack-source channels=2
+		pacmd load-module module-jack-sink channels=2 connect=no
+		pacmd load-module module-jack-source channels=2 connect=no
+		jack_connect "PulseAudio JACK Sink-01:front-left" "PulseAudio JACK Source-01:front-left"
+		jack_connect "PulseAudio JACK Sink-01:front-right" "PulseAudio JACK Source-01:front-right"
 		pacmd unload-module module-suspend-on-idle
 		pacmd set-default-sink jack_out
 		# move around source port, seems to make pulseaudio work with jack
